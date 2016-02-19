@@ -1,30 +1,34 @@
-Redux DevTools Log Monitor
-=========================
+Redux DevTools Log Monitor Console
+==================================
 
-The default monitor for [Redux DevTools](https://github.com/gaearon/redux-devtools) with a tree view.  
-It shows a log of states and actions, and lets you change their history.
+Cloned form
+[redux-devtools-log-monitor](https://github.com/gaearon/redux-devtools-log-monitor),
+but modified to log the state and actions to console (on click) instead of DOM,
+which yields much better performance.
 
-![](http://i.imgur.com/J4GeW0M.gif)
+![](http://i.imgur.com/jX5AAK7.png)
+
+![](http://i.imgur.com/hKqDVfa.png)
 
 ### Installation
 
 ```
-npm install --save-dev redux-devtools-log-monitor
+npm install --save-dev redux-devtools-log-monitor-console
 ```
 
 ### Usage
 
-You can use `LogMonitor` as the only monitor in your app:
+You can use `LogMonitorConsole` as the only monitor in your app:
 
 ##### `containers/DevTools.js`
 
 ```js
 import React from 'react';
 import { createDevTools } from 'redux-devtools';
-import LogMonitor from 'redux-devtools-log-monitor';
+import LogMonitorConsole from 'redux-devtools-log-monitor-console';
 
 export default createDevTools(
-  <LogMonitor />
+  <LogMonitorConsole />
 );
 ```
 
@@ -37,7 +41,7 @@ Consult the [`DockMonitor` README](https://github.com/gaearon/redux-devtools-doc
 
 ### Features
 
-Every action is displayed in the log. You can expand the tree view to inspect the `action` object and the `state` after it.
+Every action is displayed in the log. You can click the entry to inspect the `action` object and the `state` in console.
 
 If a reducer throws while handling an action, you will see “Interrupted by an error up the chain” instead of the state and action tree view. Scroll up until you find the action which caused the error. You will see the error message in the action log entry. If you use a hot reloading tool, you can edit the reducer, and the error will automatically update or go away.
 

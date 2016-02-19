@@ -57,17 +57,13 @@ export default class LogMonitor extends Component {
     theme: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.string
-    ]),
-    expandActionRoot: PropTypes.bool,
-    expandStateRoot: PropTypes.bool
+    ])
   };
 
   static defaultProps = {
     select: (state) => state,
     theme: 'nicinabox',
-    preserveScrollTop: true,
-    expandActionRoot: true,
-    expandStateRoot: true
+    preserveScrollTop: true
   };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -198,8 +194,6 @@ export default class LogMonitor extends Component {
                          previousState={previousState}
                          collapsed={skippedActionIds.indexOf(actionId) > -1}
                          error={error}
-                         expandActionRoot={this.props.expandActionRoot}
-                         expandStateRoot={this.props.expandStateRoot}
                          onActionClick={this.handleToggleAction} />
       );
     }

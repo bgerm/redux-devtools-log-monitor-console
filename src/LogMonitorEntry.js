@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import JSONTree from 'react-json-tree';
 import LogMonitorEntryAction from './LogMonitorEntryAction';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
@@ -7,9 +6,6 @@ const styles = {
   entry: {
     display: 'block',
     WebkitUserSelect: 'none'
-  },
-  tree: {
-    paddingLeft: 0
   }
 };
 
@@ -21,9 +17,7 @@ export default class LogMonitorEntry extends Component {
     select: PropTypes.func.isRequired,
     error: PropTypes.string,
     onActionClick: PropTypes.func.isRequired,
-    collapsed: PropTypes.bool,
-    expandActionRoot: PropTypes.bool,
-    expandStateRoot: PropTypes.bool
+    collapsed: PropTypes.bool
   };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -33,46 +27,24 @@ export default class LogMonitorEntry extends Component {
     this.handleActionClick = this.handleActionClick.bind(this);
   }
 
-  printState(state, error) {
-    let errorText = error;
-    if (!errorText) {
-      try {
-        return (
-          <JSONTree
-            theme={this.props.theme}
-            keyName={'state'}
-            data={this.props.select(state)}
-            previousData={
-              typeof this.props.previousState !== 'undefined' ?
-                this.props.select(this.props.previousState) :
-                undefined
-            }
-            expandRoot={this.props.expandStateRoot}
-            style={styles.tree} />
-        );
-      } catch (err) {
-        errorText = 'Error selecting state.';
-      }
-    }
-
-    return (
-      <div style={{
-        color: this.props.theme.base08,
-        paddingTop: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingBottom: 35
-      }}>
-        {errorText}
-      </div>
-    );
-  }
-
   handleActionClick() {
     const { actionId, onActionClick } = this.props;
     if (actionId > 0) {
       onActionClick(actionId);
     }
+  }
+
+  consoleLogInfo(actionId, action, state, error) {
+    console.group(actionId, action.type);
+
+    console.log('action', action);
+    if (error) {
+      console.log('error', error);
+    } else {
+      console.log('state', state);
+    }
+
+    console.groupEnd();
   }
 
   render() {
@@ -89,14 +61,12 @@ export default class LogMonitorEntry extends Component {
       }}>
         <LogMonitorEntryAction
           theme={this.props.theme}
-          collapsed={collapsed}
           action={action}
-          expandActionRoot={this.props.expandActionRoot}
           onClick={this.handleActionClick}
           style={{...styles.entry, ...styleEntry}}/>
         {!collapsed &&
-          <div>
-            {this.printState(state, error)}
+          <div style={{color: this.props.theme.base06, paddingTop: 8, paddingBottom: 7, paddingLeft: 16 }}>
+            {actionId} <a style={{textDecoration: 'underline', color: this.props.theme.base06}} onClick={() => this.consoleLogInfo(actionId, action, state, error)}>Log to Console</a>
           </div>
         }
       </div>
